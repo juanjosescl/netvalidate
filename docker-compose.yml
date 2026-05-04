@@ -1,0 +1,16 @@
+services:
+  api:
+    build: .
+    image: netvalidate:latest
+    container_name: netvalidate-api
+    ports:
+      - "8000:8000"
+    environment:
+      NETVALIDATE_API_KEY: ${NETVALIDATE_API_KEY:-dev-key-change-me}
+      NETVALIDATE_DB_URL: sqlite+aiosqlite:////app/data/netvalidate.db
+      NETVALIDATE_PROFILES_DIR: /app/examples/profiles
+      NETVALIDATE_LOG_LEVEL: INFO
+    volumes:
+      - ./data:/app/data
+      - ./examples/profiles:/app/examples/profiles:ro
+    restart: unless-stopped

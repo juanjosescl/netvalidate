@@ -1,0 +1,14 @@
+vendor: cisco
+description: Basic operational checks for Cisco IOS XE devices
+checks:
+  - name: ospf_full_adjacencies
+    kind: ospf_neighbors_full
+    expected_min: 2
+    severity: critical
+  - name: ntp_synchronized
+    kind: ntp_synced
+    severity: warning
+  - name: minimum_interfaces_up
+    kind: min_interfaces_up
+    expected_min: 4
+    severity: warning

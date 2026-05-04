@@ -1,0 +1,10 @@
+vendor: huawei
+description: Basic operational checks for Huawei VRP devices
+checks:
+  - name: eth_trunks_health
+    kind: eth_trunks_healthy
+    severity: critical
+  - name: ospf_full_adjacencies
+    kind: ospf_neighbors_full
+    expected_min: 1
+    severity: critical

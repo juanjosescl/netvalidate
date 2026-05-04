@@ -1,0 +1,9 @@
+vendor: raisecom
+description: Basic operational checks for Raisecom access switches
+checks:
+  - name: uplink_state
+    kind: uplink_up
+    severity: critical
+  - name: loop_detection
+    kind: loop_detection_enabled
+    severity: warning
