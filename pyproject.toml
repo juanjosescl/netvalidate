@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Multi-vendor network configuration validator exposed as a REST API"
 readme = "README.md"
 requires-python = ">=3.11"
-license = { Copyright (c) 2026 Juan Jose Olate Urzua" }
+license = { text = "MIT" }
 authors = [{ name = "Juan Jose Olate Urzua" }]
 keywords = ["network", "automation", "validation", "cisco", "huawei", "raisecom"]
 
