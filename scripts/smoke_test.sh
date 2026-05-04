@@ -1,11 +1,17 @@
 #!/bin/bash
 # Smoke test contra una instancia corriendo de netvalidate.
-# Uso: ./scripts/smoke_test.sh [base_url] [api_key]
+# Uso: ./scripts/smoke_test.sh [base_url]
+# La API key se lee automáticamente desde .env
 
 set -e
 
 BASE_URL="${1:-http://localhost:8000}"
-API_KEY="${2:-C8NU5nVmvHsEBjO9wJLLqYnTP3QOeF5jj7xdzoYFm9s}"
+
+# Cargar API key desde .env si existe
+if [ -f .env ]; then
+    API_KEY=$(grep "^NETVALIDATE_API_KEY=" .env | cut -d '=' -f2-)
+fi
+API_KEY="${API_KEY:-dev-key-change-me}"
 
 echo "→ Smoke test: $BASE_URL"
 
@@ -28,8 +34,8 @@ RESPONSE=$(curl -s -X POST "$BASE_URL/api/v1/validate" \
   -H "X-API-Key: $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"device_ip":"192.0.2.10","vendor":"cisco","profile":"cisco_basic"}')
-JOB_ID=$(echo "$RESPONSE" | python3 -c "import sys,json; print(json.load(sys.stdin)['job_id'])")
-[ -n "$JOB_ID" ] && echo "OK ($JOB_ID)" || { echo "FAIL"; exit 1; }
+JOB_ID=$(echo "$RESPONSE" | python3 -c "import sys,json; print(json.load(sys.stdin)['job_id'])" 2>/dev/null)
+[ -n "$JOB_ID" ] && echo "OK ($JOB_ID)" || { echo "FAIL — response: $RESPONSE"; exit 1; }
 
 # 4. Poll job until completion
 echo -n "  GET /jobs/$JOB_ID ... "
