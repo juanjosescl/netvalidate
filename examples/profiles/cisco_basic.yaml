@@ -1,5 +1,5 @@
 vendor: cisco
-description: Basic operational checks for Cisco IOS XE devices
+description: Basic operational checks for Cisco IOS / IOS XE devices
 checks:
   - name: ospf_full_adjacencies
     kind: ospf_neighbors_full
@@ -11,4 +11,8 @@ checks:
   - name: minimum_interfaces_up
     kind: min_interfaces_up
     expected_min: 4
+    severity: warning
+  - name: device_uptime
+    kind: min_uptime_days
+    expected_min: 1
     severity: warning

@@ -1,10 +1,7 @@
 """Unit tests for vendor validators - logic only, no network."""
-import pytest
-
 from netvalidate.vendors.cisco import CiscoValidator
 from netvalidate.vendors.huawei import HuaweiValidator
 from netvalidate.vendors.raisecom import RaisecomValidator
-
 
 # -----------------------------------------------------------------------------
 # Cisco
@@ -16,8 +13,8 @@ def test_cisco_evaluate_all_passing():
     raw = {
         "version": "Cisco IOS XE 17.9.1",
         "ospf_neighbors": [
-            {"neighbor_id": "10.0.0.2", "state": "FULL", "area": "0"},
-            {"neighbor_id": "10.0.0.3", "state": "FULL", "area": "0"},
+            {"neighbor_id": "10.0.0.2", "state": "FULL", "interface": "Gi0/1"},
+            {"neighbor_id": "10.0.0.3", "state": "FULL", "interface": "Gi0/2"},
         ],
         "interfaces_up": 12,
         "ntp_synced": True,
@@ -41,8 +38,8 @@ def test_cisco_evaluate_ospf_insufficient():
     validator = CiscoValidator()
     raw = {
         "ospf_neighbors": [
-            {"neighbor_id": "10.0.0.2", "state": "FULL", "area": "0"},
-            {"neighbor_id": "10.0.0.3", "state": "INIT", "area": "0"},
+            {"neighbor_id": "10.0.0.2", "state": "FULL", "interface": "Gi0/1"},
+            {"neighbor_id": "10.0.0.3", "state": "INIT", "interface": "Gi0/2"},
         ],
         "interfaces_up": 12,
         "ntp_synced": True,
@@ -90,6 +87,23 @@ def test_cisco_evaluate_min_interfaces():
 
     assert results[0].passed is False
     assert results[0].actual == 2
+
+
+def test_cisco_evaluate_min_uptime():
+    """New check kind: min_uptime_days."""
+    validator = CiscoValidator()
+    raw = {"ospf_neighbors": [], "interfaces_up": 5, "ntp_synced": True, "uptime_days": 0}
+    profile = {
+        "checks": [
+            {"name": "uptime", "kind": "min_uptime_days",
+             "expected_min": 1, "severity": "warning"},
+        ]
+    }
+
+    results = validator.evaluate(raw, profile)
+
+    assert results[0].passed is False
+    assert "Recent reboot" in results[0].message
 
 
 # -----------------------------------------------------------------------------
