@@ -8,7 +8,7 @@ from netvalidate.models.db import get_session_factory
 from netvalidate.models.schemas import ValidationResult
 from netvalidate.profiles.loader import load_profile
 from netvalidate.storage.repository import JobRepository
-from netvalidate.vendors.raisecom import get_validator
+from netvalidate.vendors import get_validator
 
 
 async def run_validation_job(
