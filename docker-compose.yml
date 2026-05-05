@@ -5,11 +5,12 @@ services:
     container_name: netvalidate-api
     ports:
       - "8000:8000"
+    env_file:
+      - .env
     environment:
-      NETVALIDATE_API_KEY: ${NETVALIDATE_API_KEY:-dev-key-change-me}
+      # Overrides forzados que no quieres que vengan del .env
       NETVALIDATE_DB_URL: sqlite+aiosqlite:////app/data/netvalidate.db
       NETVALIDATE_PROFILES_DIR: /app/examples/profiles
-      NETVALIDATE_LOG_LEVEL: INFO
     volumes:
       - ./data:/app/data
       - ./examples/profiles:/app/examples/profiles:ro
