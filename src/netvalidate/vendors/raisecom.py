@@ -47,18 +47,3 @@ class RaisecomValidator(BaseValidator):
                     )
                 )
         return results
-
-
-def get_validator(vendor: str) -> BaseValidator:
-    """Factory: return the validator instance for a given vendor."""
-    from netvalidate.vendors.cisco import CiscoValidator
-    from netvalidate.vendors.huawei import HuaweiValidator
-
-    mapping: dict[str, BaseValidator] = {
-        "cisco": CiscoValidator(),
-        "huawei": HuaweiValidator(),
-        "raisecom": RaisecomValidator(),
-    }
-    if vendor not in mapping:
-        raise ValueError(f"Unsupported vendor: {vendor}")
-    return mapping[vendor]

@@ -126,7 +126,7 @@ checks:
 
 1. Create `src/netvalidate/vendors/<vendor>.py` extending `BaseValidator`.
 2. Implement `collect()` (device interaction) and `evaluate()` (rule logic).
-3. Register it in the `get_validator` factory.
+3. Register it in the `_VALIDATORS` mapping in `src/netvalidate/vendors/__init__.py`.
 4. Add a profile under `examples/profiles/`.
 
 ## Status
